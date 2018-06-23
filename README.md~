@@ -46,6 +46,7 @@ this will generate traj_Calpha.dat
 ```
 
 - Then use main.cpp to compute pairwise distances and select out pivots for pivot-diffusion maps:
+	- First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, then execute:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
