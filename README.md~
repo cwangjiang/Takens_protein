@@ -103,10 +103,13 @@ Use meshless_jacobian.m to compute detJ between original and reconstructed FES.
 
 # 2 Villin: 
 
+2 Villin is similar to 1 Trp-cage
 
 
 
 # 3 BBA: 
+
+3 BBA is similar to 1 Trp-cage
 
 
 
