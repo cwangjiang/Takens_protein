@@ -45,14 +45,16 @@ this will generate traj_Calpha.dat
 >> subtraj.m
 ```
 
-- Then use main.cpp to compute pairwise distances and select out pivots for pivot-diffusion maps:
-	- First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, then execute:
+- Then use main.cpp to compute pairwise distances and select out pivots for pivot-diffusion maps. First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, then execute:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
 ./main.out
 ```
-This will generate Distance.mat, pivot.mat, pivotindex.mat. Distance.mat is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots, pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off Ncut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1.
+This will generate Distance.mat, pivot.mat, pivotindex.mat. 
+	- Distance.mat is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots.
+	- pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off Ncut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1.
+	- pivotindex.mat is list out all N points and the pivot ID the belong to.
 
 - Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
 
