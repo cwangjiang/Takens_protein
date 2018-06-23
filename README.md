@@ -28,6 +28,7 @@ This will generate traj_pbc.gro
 Use clean_data.cpp to clean .gro file, making it more structured:
 ```bash
 g++ clean_data.cpp -o cleandata.out
+
 ./cleandata.out
 ```
 this will generate traj_Calpha.dat
@@ -39,6 +40,7 @@ use subtraj.m in matlab to subsample 100,000 (skip10), or 10,000 (skip100) point
 Then use main.cpp to conduct pivot-diffusion maps, here is just to compute the pairwise distances:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
+
 ./main.out
 ```
 This will generate Distance.mat/pivot.mat/pivotindex.mat Distance is the N by m distance matrix, N is 100,000, m is the number of pivots
