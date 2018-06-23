@@ -61,18 +61,17 @@ This will generate Distance.mat, pivot.mat, pivotindex.mat.
 >> loadingfile
 ```
 
-We find that using rcut = 0.41 give us 400 pivots, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
+We find that using rcut = 0.41 give us 400 pivots, usually around 500~1000 pivots is pretty enough to cover the whole manifold, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
 
 - loadingfile.m will generate the 622 by 622 distance matrix of only pivots, then use dMap.m in matlab to conduct diffusion maps on 622 pivot points matrix. In the dMap.m code, we need set N = 622, then tune parameters eps and <img src="https://latex.codecogs.com/gif.latex?\alpha">, where <img src="https://latex.codecogs.com/gif.latex?\alpha"> is the factor to rescale all pairwise distances, to balance the density, usually <img src="https://latex.codecogs.com/gif.latex?0.1<\alpha<1.0">, we can try different one, and see if it can shrink the sparse and expaned the condensed region to reveal more fine structures, we can also compute local density, to make sure good <img src="https://latex.codecogs.com/gif.latex?\alpha"> make the difference between maximum and minimum local density reasonable. eps is the Gaussian kernal bandwidth, it should be larger than rcut. We set esp = 1, and 
 <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">, then execute:
 ```bash
-dMap
+>> dMap
 ```
 This will generate dMap.mat which store the eigenvectors and eigenvalues for 622 pivots.
 
 - Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
 
-Notice: In main.cpp, we loop over all 100,000 points to find out about 500-1000 pivots, which depend on the number cutoff and radius cutoff of each domain, the criterial is: Ncut is about 1-10% of the totall N, and test different rcut so that it generate about 500 pivot for you, but the test is slow on 100,000 points, so we can do this test on a smaller smaplling, once we know the good rcut, we can apply it to the 100,000 points. In dMaps, we also need a \epsilon in Gaussian, and \alpha. the criterial is: \epsilong should be slightly larger than rcut. Then you compute the local density of each point using Density.m, compute the ration of the max_density/min_density, this may be a large number, for example say R = 10^50, \alpha should rescale all distance and make R smaller: R^(\alpha) = 10^5, so \alpha = 0.1.
 
 - Then compute head to tail distance using compute_angle.m 
 this will generate distance120.mat
