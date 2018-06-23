@@ -74,11 +74,14 @@ This will generate dMap.mat which store the eigenvectors and eigenvalues for 622
 ```bash
 >> nystrom
 ```
-This generate X.mat, which is an N by 9 matrix, and the embedding of all 100,000 points in to the dMap space, but we only care about the first two colums, since they correspond to <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">.
+This generate X.mat, which is an N by 9 matrix, and the embedding of all 100,000 points in to the dMap space, but we only care about the first two colums, since they correspond to <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
 
-- Then compute head to tail distance using compute_angle.m 
-this will generate distance120.mat
+- Then compute head to tail distance using compute_h2t.m, here we don't use the subsamplings, we use the full trajectory, so that the resolution of the h2t(t) is high enough.
+```bash
+>> compute_h2t
+```
+this will generate h2t.mat distance.
 
 - Use compute_RMSD.m to compute Rg,RMSD, RMSD_helix, the native state is stored  as trpnativeCalpha.m
 This will generate RMSD.mat
