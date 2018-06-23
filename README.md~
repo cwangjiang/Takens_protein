@@ -26,8 +26,10 @@ editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
 This will generate traj_pbc.gro
 
 Use clean_data.cpp to clean .gro file, making it more structured:
+```bash
 g++ clean_data.cpp -o cleandata.out
 ./cleandata.out
+```
 this will generate traj_Calpha.dat
 
 Load this structured traj_Calpha.dat into matlab, save it as a .mat file: traj_Calpha.mat
