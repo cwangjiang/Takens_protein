@@ -68,9 +68,13 @@ We find that using rcut = 0.41 give us 400 pivots, usually around 500~1000 pivot
 ```bash
 >> dMap
 ```
-This will generate dMap.mat which store the eigenvectors and eigenvalues for 622 pivots.
+This will generate dMap.mat which store the eigenvectors and eigenvalues for 622 pivots. We find that top two non-trivial eigenvectors are <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">
 
-- Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
+- Then use nystrom.m in matlab to insert the rest 100,000-622 points back in to the diffusion maps, set N = 100000, esp = 1, <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">, so that they are consistent with the dMaps:
+```bash
+>> nystrom
+```
+This generate X.mat, which is an N by 9 matrix, 
 
 
 - Then compute head to tail distance using compute_angle.m 
