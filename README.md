@@ -64,7 +64,7 @@ This will generate Distance.mat, pivot.mat, pivotindex.mat.
 We find that using rcut = 0.41 give us 400 pivots, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
 
 - loadingfile.m will generate the 622 by 622 distance matrix of only pivots, then use dMap.m in matlab to conduct diffusion maps on 622 pivot points matrix. In the dMap.m code, we need set N = 622, then tune parameters eps and <img src="https://latex.codecogs.com/gif.latex?\alpha">, where <img src="https://latex.codecogs.com/gif.latex?\alpha"> is the factor to rescale all pairwise distances, to balance the density, usually <img src="https://latex.codecogs.com/gif.latex?0.1<\alpha<1.0">, we can try different one, and see if it can shrink the sparse and expaned the condensed region to reveal more fine structures, we can also compute local density, to make sure good <img src="https://latex.codecogs.com/gif.latex?\alpha"> make the difference between maximum and minimum local density reasonable. eps is the Gaussian kernal bandwidth, it should be larger than rcut. We set esp = 1, and 
-<img src="https://latex.codecogs.com/gif.latex?\alpha = 0.15">.
+<img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">.
 
 - Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
 
