@@ -40,9 +40,13 @@ this will generate traj_Calpha.dat
 >> save('traj_Calpha_test.mat','traj_Calpha','-ascii')
 ```
 
-- use subtraj.m in matlab to subsample 100,000 (skip10), or 10,000 (skip100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple time for finding parameters, so skip 100, with 10,000 points small sampling is to find parameters, and then use such parameters to apply to 100,000 trajectory. 
+- use subtraj.m in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
+```bash
+>> subtraj.m
+```
 
-- Then use main.cpp to conduct pivot-diffusion maps, here is just to compute the pairwise distances:
+- Then use main.cpp to compute pairwise distances and select out pivots for pivot-diffusion maps:
+	- First use small set with 10,000 to find good rcut
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
