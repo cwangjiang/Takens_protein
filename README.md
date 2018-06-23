@@ -33,7 +33,12 @@ g++ clean_data.cpp -o cleandata.out
 ```
 this will generate traj_Calpha.dat
 
-- Load this structured traj_Calpha.dat into matlab, save it as a .mat file: traj_Calpha.mat
+- Load this structured traj_Calpha.dat into matlab, save it as an -ascii format .mat file: traj_Calpha.mat, so that it can be loaded in C++.
+```bash
+>> load traj_Calpha.dat
+
+>> save('traj_Calpha_test.mat','traj_Calpha','-ascii')
+```
 
 - use subtraj.m in matlab to subsample 100,000 (skip10), or 10,000 (skip100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple time for finding parameters, so skip 100, with 10,000 points small sampling is to find parameters, and then use such parameters to apply to 100,000 trajectory. 
 

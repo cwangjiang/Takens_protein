@@ -35,9 +35,9 @@ this will generate traj_Calpha.dat
 
 - Load this structured traj_Calpha.dat into matlab, save it as a .mat file: traj_Calpha.mat
 
-use subtraj.m in matlab to subsample 100,000 (skip10), or 10,000 (skip100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple time for finding parameters, so skip 100, with 10,000 points small sampling is to find parameters, and then use such parameters to apply to 100,000 trajectory. 
+- use subtraj.m in matlab to subsample 100,000 (skip10), or 10,000 (skip100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple time for finding parameters, so skip 100, with 10,000 points small sampling is to find parameters, and then use such parameters to apply to 100,000 trajectory. 
 
-Then use main.cpp to conduct pivot-diffusion maps, here is just to compute the pairwise distances:
+- Then use main.cpp to conduct pivot-diffusion maps, here is just to compute the pairwise distances:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
@@ -45,27 +45,27 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 ```
 This will generate Distance.mat/pivot.mat/pivotindex.mat Distance is the N by m distance matrix, N is 100,000, m is the number of pivots
 
-Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
+- Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
 
-Use dMap.m in matlab to conduct diffusion maps on the m by m pivot points matrix. 
+- Use dMap.m in matlab to conduct diffusion maps on the m by m pivot points matrix. 
 
-Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
+- Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
 
 Notice: In main.cpp, we loop over all 100,000 points to find out about 500-1000 pivots, which depend on the number cutoff and radius cutoff of each domain, the criterial is: Ncut is about 1-10% of the totall N, and test different rcut so that it generate about 500 pivot for you, but the test is slow on 100,000 points, so we can do this test on a smaller smaplling, once we know the good rcut, we can apply it to the 100,000 points. In dMaps, we also need a \epsilon in Gaussian, and \alpha. the criterial is: \epsilong should be slightly larger than rcut. Then you compute the local density of each point using Density.m, compute the ration of the max_density/min_density, this may be a large number, for example say R = 10^50, \alpha should rescale all distance and make R smaller: R^(\alpha) = 10^5, so \alpha = 0.1.
 
-Then compute head to tail distance using compute_angle.m 
+- Then compute head to tail distance using compute_angle.m 
 this will generate distance120.mat
 
-Use compute_RMSD.m to compute Rg,RMSD, RMSD_helix, the native state is stored  as trpnativeCalpha.m
+- Use compute_RMSD.m to compute Rg,RMSD, RMSD_helix, the native state is stored  as trpnativeCalpha.m
 This will generate RMSD.mat
 
-Then we can use plot_Rg.m to plot dmaps, and each point is colored as Rg/RMSD.
+- Then we can use plot_Rg.m to plot dmaps, and each point is colored as Rg/RMSD.
 
-Then use FES.m to compute FES in the diffusion map space.
+- Then use FES.m to compute FES in the diffusion map space.
 
-Then use FES_new.m to compute FE associate with each point, this will generate OrigionFE.mat
+- Then use FES_new.m to compute FE associate with each point, this will generate OrigionFE.mat
 
-Use FES_RMSD.m to compute FE and plot FE in the conventional space.
+- Use FES_RMSD.m to compute FE and plot FE in the conventional space.
 
 ## 2_MI
 use MI.m to compute mutual information. good delay time is where MI decays to 1/e.
