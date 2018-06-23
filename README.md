@@ -52,7 +52,7 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 
 ./main.out
 ```
-This will generate Distance.mat/pivot.mat/pivotindex.mat Distance is the N by m distance matrix, N is 100,000, m is the number of pivots
+This will generate Distance.mat, pivot.mat, pivotindex.mat. Distance.mat is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots, pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off Ncut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N*0.01~N*0.1.
 
 - Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
 

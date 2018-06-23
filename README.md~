@@ -52,7 +52,7 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 
 ./main.out
 ```
-This will generate Distance.mat/pivot.mat/pivotindex.mat Distance is the N by m distance matrix, N is 100,000, m is the number of pivots
+This will generate Distance.mat, pivot.mat, pivotindex.mat. Distance.mat is the m by N distance matrix, N is 100,000, m is the number of pivots
 
 - Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
 
