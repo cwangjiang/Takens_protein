@@ -61,11 +61,9 @@ This will generate Distance.mat, pivot.mat, pivotindex.mat.
 >> loadingfile
 ```
 
-We find that using rcut = 0.41 give us 400 pivots, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, and excute the above code, we get 622 pivots from the 100,000 points set.
+We find that using rcut = 0.41 give us 400 pivots, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
 
-
-
-- Use dMap.m in matlab to conduct diffusion maps on the m by m pivot points matrix. 
+- loadingfile.m will generate the 622 by 622 distance matrix of only pivots, then use dMap.m in matlab to conduct diffusion maps on 622 pivot points matrix. In the dMap.m code, we need set N = 622, then tune parameters eps and <img src="https://latex.codecogs.com/gif.latex?E=\alpha">
 
 - Then use nystrom.m in matlab to insert the rest N-m points back in to the diffusion maps, and get the result matrix: X.mat
 
