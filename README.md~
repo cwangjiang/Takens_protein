@@ -20,7 +20,9 @@ Stride1 means there is no subsample, the interval between two frame is 0.2ns, an
 ## 1_dMaps
 
 to transfer .pdb to .gro file:
+```bash
 editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
+```
 This will generate traj_pbc.gro
 
 Use clean_data.cpp to clean .gro file, making it more structured:
