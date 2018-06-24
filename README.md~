@@ -179,6 +179,7 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 
 - Simulation is 200,000ns, the interval between two samplings is 0.2ns, totally 1,000,000 points, we subsample 100,000 to perform analysis.
 - In the pivot diffusion maps of all atom configuration, Ncut = 1000, rcut = 1.0, which gives 596 pivots, in diffusion maps, eps = 1.1, alpha = 0.15, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+
 - In the delay embedding, delay time is 0.2*2 = 0.4ns, delay dimension D is 50. 
 - In the diffusion maps on the reconstructed data, Ncut = 6000, rcut = 8.0, this gives 1358 pivots, and eps = 9, alpha = 0.5, and extract two top CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*">.
 - The original well depth is 2.60, reconstructed well depth is 3.90, and the FE correlation is 0.46. 
