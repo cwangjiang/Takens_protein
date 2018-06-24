@@ -25,7 +25,7 @@ editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
 ```
 This will generate traj_pbc.gro
 
-- Use clean_data.cpp to clean .gro file, making it more structured:
+- Use `clean_data.cpp` to clean .gro file, making it more structured:
 ```bash
 g++ clean_data.cpp -o cleandata.out
 
@@ -40,12 +40,12 @@ this will generate traj_Calpha.dat
 >> save('traj_Calpha_test.mat','traj_Calpha','-ascii')
 ```
 
-- use subtraj.m in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
+- use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
 ```bash
 >> subtraj.m
 ```
 
-- Then use main.cpp to compute pairwise distances and select out pivots for pivot-diffusion maps. First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, traj.load("traj_Calpha_skip100.mat",raw_ascii), then execute:
+- Then use `main.cpp` to compute pairwise distances and select out pivots for pivot-diffusion maps. First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, traj.load("traj_Calpha_skip100.mat",raw_ascii), then execute:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
@@ -53,7 +53,7 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 ```
 This will generate Distance.mat, pivot.mat, pivotindex.mat. 
 
-- Use loadingfile.m in matlab to load these matrix, and find out the number of pivots.
+- Use `loadingfile.m` in matlab to load these matrix, and find out the number of pivots.
 	- Distance.mat is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots. 
 	- pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off Ncut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1. 
 	- pivotindex.mat is list out all N points and the pivot ID the belong to.
@@ -70,7 +70,7 @@ We find that using rcut = 0.41 give us 400 pivots, usually around 500~1000 pivot
 ```
 This will generate dMap.mat which store the eigenvectors and eigenvalues for 622 pivots. We find that top two non-trivial eigenvectors are <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
-- Then use nystrom.m in matlab to insert the rest 100,000-622 points back in to the diffusion maps, set N = 100000, esp = 1, <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">, so that they are consistent with the dMaps:
+- Then use `nystrom.m` in matlab to insert the rest 100,000-622 points back in to the diffusion maps, set N = 100000, esp = 1, <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">, so that they are consistent with the dMaps:
 ```bash
 >> nystrom
 ```
@@ -83,42 +83,42 @@ This generate X.mat, which is an N by 9 matrix, and the embedding of all 100,000
 ```
 this will generate h2t.mat.
 
-- Use compute_RMSD.m to compute Rg, RMSD, RMSD_helix, the native state is stored as trpnativeCalpha.mat
+- Use `compute_RMSD.m` to compute Rg, RMSD, RMSD_helix, the native state is stored as trpnativeCalpha.mat
 ```bash
 >> compute_RMSD
 ```
 This will generate RMSD.mat, RMSD_helix.mat, and Rg.mat, Rg is a N by 4 matrix, the first column is Radius of gyration, the 2,3,4 columns are 1st, 2nd, 3rd component of gyration tensor. 
 
-- Then we can use plot_Rg.m to plot dmaps, and each point is colored as Rg/RMSD/RMSD_helix.
+- Then we can use `plot_Rg.m` to plot dmaps, and each point is colored as Rg/RMSD/RMSD_helix.
 ```bash
 >> plot_Rg
 ```
 
-- Then use FES.m to compute FES in diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+- Then use `FES.m` to compute FES in diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 ```bash
 >> FES
 ```
 
-- Then use FES_new.m to compute FE associate with each point, and can be used for computing free energy correlation with the reconstructed one. 
+- Then use `FES_new.m` to compute FE associate with each point, and can be used for computing free energy correlation with the reconstructed one. 
 ```bash
 >> FES
 ```
 this will generate OrigionFE.mat
 
-- Use FES_RMSD.m to compute FE and plot FE in the conventional space.
+- Use `FES_RMSD.m` to compute FE and plot FE in the conventional space.
 ```bash
 >> FES_RMSD
 ```
 
 ## 2_MI
-Move h2t.mat from 1_dMaps here, and use MI.m to compute mutual information. good delay time is where MI decays to 1/e.
+Move h2t.mat from 1_dMaps here, and use `MI.m` to compute mutual information. good delay time is where MI decays to 1/e.
 ```bash
 >> MI
 ```
 We select the bin to be 5 for running MI, and set the maximum tau to be 100, which equal to 20ns, because the interval between two adjacent points is 0.2ns. We find that 0.6ns is a good delay time. 
 
 ## 3_FNN
-Move h2t.mat here, and use FNN.m or FNN_fast.m to compute E1 function, which give good delay dimension D, FNN_fast.m is optimized from FNN.m, may runs faster.
+Move h2t.mat here, and use FNN.m or `FNN_fast.m` to compute E1 function, which give good delay dimension D, FNN_fast.m is optimized from FNN.m, may runs faster.
 ```bash
 >> FNN_fast(h2t)
 ```
@@ -156,7 +156,7 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 ## 6_detJ
 Move X.mat from 1_dMaps and rename it as X_Original.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
 ```bash
-plotDetj
+>> plotDetj
 ```
 In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshless_jacobian(X_delay,X_origin,0)` to compute the detJ for the backward mapping.
 
