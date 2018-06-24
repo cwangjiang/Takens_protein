@@ -136,7 +136,7 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 
 - Use main.cpp to compute pairwise distances, and generate about 500 pivots, if 100,000 is too much and runs slow, we can try this on a smaller sampling of 10,000 points. Determine the Ncut first, and try different rcut. 
 
-- Then using 'loadingfile.m' to load the pairwise distance into matlab. 
+- Then using `loadingfile.m` to load the pairwise distance into matlab. 
 
 - Use dMap.m to conduct diffusion maps on the pivots.
 
