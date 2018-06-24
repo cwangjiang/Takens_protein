@@ -81,18 +81,34 @@ This generate X.mat, which is an N by 9 matrix, and the embedding of all 100,000
 ```bash
 >> compute_h2t
 ```
-this will generate h2t.mat distance.
+this will generate h2t.mat.
 
-- Use compute_RMSD.m to compute Rg,RMSD, RMSD_helix, the native state is stored  as trpnativeCalpha.m
-This will generate RMSD.mat
+- Use compute_RMSD.m to compute Rg, RMSD, RMSD_helix, the native state is stored as trpnativeCalpha.mat
+```bash
+>> compute_RMSD
+```
+This will generate RMSD.mat, RMSD_helix.mat, and Rg.mat, Rg is a N by 4 matrix, the first column is Radius of gyration, the 2,3,4 columns are 1st, 2nd, 3rd component of gyration tensor. 
 
-- Then we can use plot_Rg.m to plot dmaps, and each point is colored as Rg/RMSD.
+- Then we can use plot_Rg.m to plot dmaps, and each point is colored as Rg/RMSD/RMSD_helix.
+```bash
+>> plot_Rg
+```
 
-- Then use FES.m to compute FES in the diffusion map space.
+- Then use FES.m to compute FES in diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+```bash
+>> FES
+```
 
-- Then use FES_new.m to compute FE associate with each point, this will generate OrigionFE.mat
+- Then use FES_new.m to compute FE associate with each point, and can be used for computing free energy correlation with the reconstructed one. 
+```bash
+>> FES
+```
+this will generate OrigionFE.mat
 
 - Use FES_RMSD.m to compute FE and plot FE in the conventional space.
+```bash
+>> FES_RMSD
+```
 
 ## 2_MI
 use MI.m to compute mutual information. good delay time is where MI decays to 1/e.
