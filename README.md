@@ -151,7 +151,7 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 >> Compute_Correlation
 ```
 
-- Use `plot_Correlation.m to compute the FE correlation between original and reconstructed FES. 
+- Use `plot_Correlation.m` to compute the FE correlation between original and reconstructed FES. 
 
 ## 6_detJ
 Move X.mat from 1_dMaps and rename it as X_Original.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
@@ -163,8 +163,11 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 
 # 2 Villin: 
 
-2 Villin is similar to 1 Trp-cage
+2 Villin is similar to 1 Trp-cage, only parameters are provided below:
 
+- Simulation is 120,000ns, the interval between two samplings is 0.2ns, totally 600,000 points, we subsample 60,000 to perform analysis.
+- In the pivot diffusion maps of all atom configuration, Ncut = 1000, rcut = 0.8, which gives 448 pivots, in diffusion maps, eps = 1.0, alpha = 0.7, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+- 
 
 
 # 3 BBA: 
