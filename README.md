@@ -111,32 +111,42 @@ this will generate OrigionFE.mat
 ```
 
 ## 2_MI
-use MI.m to compute mutual information. good delay time is where MI decays to 1/e.
+Move h2t.mat from 1_dMaps here, and use MI.m to compute mutual information. good delay time is where MI decays to 1/e.
+```bash
+>> MI
+```
+We select the bin to be 5 for running MI, and set the maximum tau to be 100, which equal to 20ns, because the interval between two adjacent points is 0.2ns. We find that 0.6ns is a good delay time. 
 
 ## 3_FNN
-Use FNN.m or FNN_fast.m to compute E1 function, FNN_fast is a optimized verstion, may runs faster. 
+Move h2t.mat here, and use FNN.m or FNN_fast.m to compute E1 function, which give good delay dimension D, FNN_fast.m is optimized from FNN.m, may runs faster.
+```bash
+>> FNN_fast(h2t)
+```
+E1 saturate at about 20 dimension, we can use any dimension greater than 20, and we use 50 dimension.
 
 ## 4_RCT
-Use delay time and delay dimension to generate a reconstucted euclidean space, EBD.mat
+Move h2t here, and use delay time tau and delay dimension D to generate a reconstucted euclidean space, EBD.mat
+```bash
+>> RCT
+```
+This will generate a 100,000 by 50 matrix, each row is a reconstructed point, there are 100,000 points, the full length of h2t.mat is 1,000,000, and we sub-sample 100,000 from it, with a skip size of 10. 
 
 ## 5_RCT_dMaps
-Similar to dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between point is not RMSD between molecular configuration, but regular Eucledian distance.
+Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below:
 
-Use 
-  
-main.cpp to compute pairwise distances, and generate about 500 pivots, if 100,000 is too much and runs slow, we can try this on a smaller sampling of 10,000 points. Determine the Ncut first, and try different rcut. 
+- Use main.cpp to compute pairwise distances, and generate about 500 pivots, if 100,000 is too much and runs slow, we can try this on a smaller sampling of 10,000 points. Determine the Ncut first, and try different rcut. 
 
-Then using loadingfile.m to load the pairwise distance into matlab. 
+- Then using loadingfile.m to load the pairwise distance into matlab. 
 
-Use dMap.m to conduct diffusion maps on the pivots.
+- Use dMap.m to conduct diffusion maps on the pivots.
 
-Use nystrom.m to insert all points, and generate X.mat.
+- Use nystrom.m to insert all points, and generate X.mat.
 
-Use FES.m to plot FES on diffusion map space
+- Use FES.m to plot FES on diffusion map space
 
-Use FES_new.m to compute FE for each point, and generate delayFE.mat
+- Use FES_new.m to compute FE for each point, and generate delayFE.mat
 
-Use plot_Correlation.m to compute the FE correlation between original and reconstructed FES. 
+- Use plot_Correlation.m to compute the FE correlation between original and reconstructed FES. 
 
 ## 6_detJ
 Use meshless_jacobian.m to compute detJ between original and reconstructed FES. 
