@@ -199,3 +199,12 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 
 
 # 4 Trp-cage (1L2Y): 
+This part deals with 37 individual simulation, and will be slightly different than 1 Trp-cage:
+
+## 0_Simulation
+Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/ 
+
+
+
+
+
