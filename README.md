@@ -142,7 +142,7 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 
 - Use `nystrom.m` to insert all points, and generate `X.mat`.
 
-- Use `FES.m` to plot FES on diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">, <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*"> are functional correlated, so we ignore <img src="https://latex.codecogs.com/gif.latex?\psi_3^*">..
+- Use `FES.m` to plot FES on diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">. Since <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*"> are functional correlated, so we ignore <img src="https://latex.codecogs.com/gif.latex?\psi_3^*">..
 
 - Use `FES_new.m` to compute FE for each point, and generate `delayFE.mat`.
 
