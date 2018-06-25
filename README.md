@@ -217,6 +217,10 @@ Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajec
 ```bash
 >>Combinetraj
 ```
+This will generate traj.mat.
+
+- 2_pdmap
+Move traj.mat here to conduct pivot diffusion maps on all points. Similar as before, Ncut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
 
 
