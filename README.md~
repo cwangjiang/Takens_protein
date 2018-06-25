@@ -204,6 +204,16 @@ This part deals with 37 individual simulation, and will be slightly different th
 ## 0_Simulation
 Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided.
 
+Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in output.pdb, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long output.pdb into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
+```bash
+./CreatCoord.sh
+```
+This will generate `coordinates_sub_XXX.dat` file the subsampling of only 10,000 configurations, and each configuration contain only alpha-carbon atoms.
+
+### 1_dMaps
+
+- 1_All_subtraj
+Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajectories into one ensemble in matlab.
 
 
 
