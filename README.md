@@ -152,8 +152,6 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 >> Compute_Correlation
 ```
 
-- Use `plot_Correlation.m` to plot the FE correlation between original and reconstructed FES. 
-
 ## 6_detJ
 Move X.mat from 1_dMaps and rename it as X_Original.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
 ```bash
