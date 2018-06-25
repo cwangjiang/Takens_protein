@@ -202,7 +202,7 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 This part deals with 37 individual simulation, and will be slightly different than 1 Trp-cage:
 
 ## 0_Simulation
-Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided.
+Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
 
 Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in output.pdb, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long output.pdb into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
 ```bash
@@ -210,17 +210,33 @@ Each simulation is 1 micro second, containing 100,000 points, with interval to b
 ```
 This will generate `coordinates_sub_XXX.dat` file the subsampling of only 10,000 configurations, and each configuration contain only alpha-carbon atoms.
 
-### 1_dMaps
+## 1_dMaps
 
-#### 1_All_subtraj
+### 1_All_subtraj
 Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajectories into one ensemble in matlab.
 ```bash
 >>Combinetraj
 ```
-This will generate traj.mat.
+This will generate traj.mat, which contain 370,000 points.
+We also generate a ensemble even smaller trajectory, each simulation just contatin 1000 point, the ensemble is subtraj.mat, which contain 37,000 points.
 
-- 2_pdmap
-Move traj.mat here to conduct pivot diffusion maps on all points. Similar as before, Ncut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+### 2_pdmap
+Move subtraj.mat here to conduct pivot diffusion maps on 37,000 points. Similar as before, Ncut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a dMap.mat, which is the diffusion map of the small ensemble. 
+
+### 3_nystrom
+Move dMap.mat traj.mat here, we use  `main.cpp` to compute distances between all 370,000 points and the 478 pivots, and insert 370,000 points back into the <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3"> space. This will generate X.mat.
+
+In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate fes.mat
+
+In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate fesD.mat
+
+### 4_conventional
+
+Similar to 3_nystrom, but compute and plot all FES in the conventional space. 
+
+## 2_RCT
+To conduct delay embedding and diffusion maps on the reconstructed points. 
+
 
 
 
