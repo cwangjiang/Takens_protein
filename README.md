@@ -102,7 +102,7 @@ This will generate RMSD.mat, RMSD_helix.mat, and Rg.mat, Rg is a N by 4 matrix, 
 
 - Then use `FES_new.m` to compute FE associate with each point, and can be used for computing free energy correlation with the reconstructed one. 
 ```bash
->> FES
+>> FES_new
 ```
 this will generate OrigionFE.mat
 
@@ -147,12 +147,12 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 
 - Use `FES.m` to plot FES on diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">. Since <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*"> are functional correlated, so we ignore <img src="https://latex.codecogs.com/gif.latex?\psi_3^*">..
 
-- Use `FES_new.m` to compute FE for each point, and generate `delayFE.mat`. Move OriginFE.mat here, an use `Compute_Correlation.m` to compute free energy correlation.
+- Use `FES_new.m` to compute FE for each point, and generate `delayFE.mat`. Move `OriginFE.mat` here, an use `Compute_Correlation.m` to compute free energy correlation.
 ```bash
 >> Compute_Correlation
 ```
 
-- Use `plot_Correlation.m` to compute the FE correlation between original and reconstructed FES. 
+- Use `plot_Correlation.m` to plot the FE correlation between original and reconstructed FES. 
 
 ## 6_detJ
 Move X.mat from 1_dMaps and rename it as X_Original.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
