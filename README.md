@@ -214,8 +214,8 @@ This will generate `coordinates_sub_XXX.dat` file the subsampling of only 10,000
 
 - 1_All_subtraj
 Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajectories into one ensemble in matlab.
-```bah
->> Combinetraj
+```bash
+>>Combinetraj
 ```
 
 
