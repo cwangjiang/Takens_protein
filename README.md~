@@ -249,7 +249,7 @@ Construct delayed points using the above delay time and dimension for each simul
 ### 4_pdMap
 Apply main.cpp on the smaller ensemble traj1000.mat, with Ncut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
 
-### 5_nystrom
+#### 5_nystrom
 Compute distance between all 370,000 reconstructed point to the 970 pivots, and use nystrom to insert all 370,000 points back into the manifold, which generate X.mat. 
 
 In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate fesR.mat
