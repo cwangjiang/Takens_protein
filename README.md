@@ -19,7 +19,7 @@ Stride1 means there is no subsample, the interval between two frame is 0.2ns, an
 
 ## 1_dMaps
 
-- To transfer .pdb to .gro file:
+- Move trajectory_all_stride1.pdb here, and transfer .pdb to .gro file:
 ```bash
 editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
 ```
@@ -37,15 +37,16 @@ this will generate traj_Calpha.dat
 ```bash
 >> load traj_Calpha.dat
 
->> save('traj_Calpha_test.mat','traj_Calpha','-ascii')
+>> save('traj_Calpha.mat','traj_Calpha','-ascii')
 ```
 
 - use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
 ```bash
 >> subtraj.m
 ```
+This will generate big sampling traj_Calpha_skip10.mat and smaller one traj_Calpha_skip100.mat.
 
-- Then use `main.cpp` to compute pairwise distances and select out pivots for pivot-diffusion maps. First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, Ncut = 100, trial rcut = 0.41, traj.load("traj_Calpha_skip100.mat",raw_ascii), then execute:
+- Then use `main.cpp` to compute pairwise distances and select out pivots for pivot-diffusion maps. First use small set with 10,000 to find good rcut, in main.cpp, set N = 10000, numcut = 100, trial rcut = 0.41, traj.load("traj_Calpha_skip100.mat",raw_ascii), then execute:
 ```bash
 g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lblas
 
@@ -55,7 +56,7 @@ This will generate Distance.mat, pivot.mat, pivotindex.mat.
 
 - Use `loadingfile.m` in matlab to load these matrix, and find out the number of pivots.
 	- Distance.mat is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots. 
-	- pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off Ncut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1. 
+	- pivot.mat is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off numcut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1. 
 	- pivotindex.mat is list out all N points and the pivot ID the belong to.
 ```bash
 >> loadingfile
@@ -134,7 +135,7 @@ This will generate a 100,000 by 50 matrix, each row is a reconstructed point, th
 ## 5_RCT_dMaps
 Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
 
-- Use `main.cpp` to compute pairwise distances, setting Ncut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points EBDsub.mat firt, then apply the rcut to the big trajectory EBD.mat.
+- Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points EBDsub.mat firt, then apply the rcut to the big trajectory EBD.mat.
 
 - Then using `loadingfile.m` to load the pairwise distance into matlab. 
 
@@ -167,11 +168,11 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 
 - Simulation is 120,000ns, the interval between two samplings is 0.2ns, totally 600,000 points, we subsample 60,000 to perform analysis.
 
-- In the pivot diffusion maps of all atom configuration, Ncut = 1000, rcut = 0.8, which gives 448 pivots, in diffusion maps, eps = 1.0, alpha = 0.7, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+- In the pivot diffusion maps of all atom configuration, numcut = 1000, rcut = 0.8, which gives 448 pivots, in diffusion maps, eps = 1.0, alpha = 0.7, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
 - In the delay embedding, delay time is 0.2*2 = 0.4ns, delay dimension D is 50. 
 
-- In the diffusion maps on the reconstructed data, Ncut = 6000, rcut = 8.0, this gives 1358 pivots, and eps = 9, alpha = 0.5, and extract two top CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*">.
+- In the diffusion maps on the reconstructed data, numcut = 6000, rcut = 8.0, this gives 1358 pivots, and eps = 9, alpha = 0.5, and extract two top CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*">.
 
 - The original well depth is 3.76, reconstructed well depth is 3.90, and the FE correlation is 0.46. 
 
@@ -185,11 +186,11 @@ In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshles
 
 - Simulation is 200,000ns, the interval between two samplings is 0.2ns, totally 1,000,000 points, we subsample 100,000 to perform analysis.
 
-- In the pivot diffusion maps of all atom configuration, Ncut = 1000, rcut = 1.0, which gives 596 pivots, in diffusion maps, eps = 1.1, alpha = 0.15, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
+- In the pivot diffusion maps of all atom configuration, numcut = 1000, rcut = 1.0, which gives 596 pivots, in diffusion maps, eps = 1.1, alpha = 0.15, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
 - In the delay embedding, delay time is 0.2*4 = 0.8ns, delay dimension D is 50. 
 
-- In the diffusion maps on the reconstructed data, Ncut = 10000, rcut = 8.0, this gives 840 pivots, and eps = 10, alpha = 0.5, and extract two top CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*">.
+- In the diffusion maps on the reconstructed data, numcut = 10000, rcut = 8.0, this gives 840 pivots, and eps = 10, alpha = 0.5, and extract two top CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*">.
 
 - The original well depth is 2.60, reconstructed well depth is 3.77, and the FE correlation is 0.56. 
 
@@ -221,7 +222,7 @@ This will generate traj.mat, which contain 370,000 points.
 We also generate a ensemble even smaller trajectory, each simulation just contatin 1000 point, the ensemble is subtraj.mat, which contain 37,000 points.
 
 #### 2_pdmap
-Move subtraj.mat here to conduct pivot diffusion maps on 37,000 points. Similar as before, Ncut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a dMap.mat, which is the diffusion map of the small ensemble. 
+Move subtraj.mat here to conduct pivot diffusion maps on 37,000 points. Similar as before, numcut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a dMap.mat, which is the diffusion map of the small ensemble. 
 
 #### 3_nystrom
 Move dMap.mat traj.mat here, we use  `main.cpp` to compute distances between all 370,000 points and the 478 pivots, and insert 370,000 points back into the <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3"> space. This will generate X.mat.
@@ -247,7 +248,7 @@ FNN determines the delay dimension to be 20.
 Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble traj10k.mat, where each simulation contribute 10k delayed points, and traj1000.mat, where each simulation contributes 1000 points. 
 
 #### 4_pdMap
-Apply main.cpp on the smaller ensemble traj1000.mat, with Ncut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
+Apply main.cpp on the smaller ensemble traj1000.mat, with numcut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
 
 #### 5_nystrom
 Compute distance between all 370,000 reconstructed point to the 970 pivots, and use nystrom to insert all 370,000 points back into the manifold, which generate X.mat. 
