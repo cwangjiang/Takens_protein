@@ -256,3 +256,22 @@ In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUN
 
 In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate fesRD.mat
 
+Move fes.mat here and use `Compute_corr.m` to compute the FE correlation between the original FES and the reconstructed FES for each of the simulation. And compute the well depth for the original and the reconstructed one. 
+
+## 3_detJ
+
+Move X.mat from 1_dMaps/3_nystrom/X.mat here and rename it X_Original.mat. Move X.mat from 2_RCT/5_nystrom/X.mat and rename it X_delay.mat. Use `plotDetj.m` to compute Jacobian determinant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
