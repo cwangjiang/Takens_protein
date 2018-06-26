@@ -112,7 +112,7 @@ this will generate `OrigionFE.mat`.
 ```
 
 ## 2_MI
-Move `h2t.mat` from 1_dMaps here, and use `MI.m` to compute mutual information. good delay time is where MI decays to 1/e.
+Move `h2t.mat` from 1_dMaps here, and use `MI.m` to compute mutual information. Good delay time is where MI decays to 1/e.
 ```bash
 >> MI
 ```
@@ -126,16 +126,16 @@ Move `h2t.mat` here, and use `FNN.m` or `FNN_fast.m` to compute E1 function, whi
 E1 saturate at about 20 dimension, we can use any dimension greater than 20, and we use 50 dimension.
 
 ## 4_RCT
-Move h2t here, and use delay time tau and delay dimension D to generate a reconstucted euclidean space, `EBD.mat`
+Move `h2t.mat` here, and use delay time tau and delay dimension D to generate a reconstucted euclidean space, `EBD.mat`
 ```bash
 >> RCT
 ```
 This will generate a 100,000 by 50 matrix, each row is a reconstructed point, there are 100,000 points, the full length of `h2t.mat` is 1,000,000, and we sub-sample 100,000 from it, with a skip size of 10. 
 
 ## 5_RCT_dMaps
-Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points `EBD.mat`, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
+Similar to 1\_dMaps, we apply pivot diffusion maps to the delayed points `EBD.mat`, distance between two point is not RMSD between molecular configurations, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
 
-- Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points `EBDsub.mat` firt, then apply the rcut to the big trajectory `EBD.mat`.
+- Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points `EBDsub.mat` first, then apply the rcut to the big trajectory `EBD.mat`.
 
 - Then using `loadingfile.m` to load the pairwise distance into matlab. 
 
@@ -145,15 +145,15 @@ Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points `EBD.mat`
 
 - Use `plot_Rg.m` to plot reconstructed dmaps, and each point is colored as Rg/RMSD/RMSD_helix.
 
-- Use `FES.m` to plot FES on diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">. Since <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*"> are functional correlated, so we ignore <img src="https://latex.codecogs.com/gif.latex?\psi_3^*">..
+- Use `FES.m` to plot FES on diffusion map space <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">. Since <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_3^*"> are functional correlated, so we ignore <img src="https://latex.codecogs.com/gif.latex?\psi_3^*">.
 
-- Use `FES_new.m` to compute FE for each point, and generate `delayFE.mat`. Move `OriginFE.mat` here, an use `Compute_Correlation.m` to compute free energy correlation.
+- Use `FES_new.m` to compute FE for each point, and generate `delayFE.mat`. Move `OriginFE.mat` here, and use `Compute_Correlation.m` to compute free energy correlation.
 ```bash
 >> Compute_Correlation
 ```
 
 ## 6_detJ
-Move `X.mat` from 1\_dMaps and rename it as `X_origin.mat`, move `X.mat` from 5_RCT_dMaps and rename it as `X_delay.mat`. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
+Move `X.mat` from 1\_dMaps and rename it as `X_origin.mat`, move `X.mat` from 5_RCT_dMaps and rename it as `X_delay.mat`. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for computing detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
 ```bash
 >> plotDetj
 ```
@@ -198,10 +198,10 @@ In the plotDetj.m, change `meshless_jacobian(X_origin,X_delay,0)` into `meshless
 
 
 # 4 Trp-cage (1L2Y): 
-This part deals with 37 individual simulation, and will be slightly different than 1 Trp-cage:
+This part deals with 37 individual simulation, and will be slightly different from 1 Trp-cage:
 
 ## 0_Simulation
-Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
+Full simulation trajectories of four types of simulation are provided: 1. wild type at different temperatures, 2. designed mutation (in Nature paper), 3. single Alanine scanning mutations, 4. tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
 
 Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in `output.pdb`, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long `output.pdb` into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
 ```bash
