@@ -152,14 +152,12 @@ Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, d
 >> Compute_Correlation
 ```
 
-- Use `plot_Correlation.m` to plot the FE correlation between original and reconstructed FES. 
-
 ## 6_detJ
-Move X.mat from 1_dMaps and rename it as X_Original.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
+Move X.mat from 1_dMaps and rename it as X_origin.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
 ```bash
 >> plotDetj
 ```
-In the plotDetj.m, change `meshless_jacobian(X_origion,X_delay,0)` into `meshless_jacobian(X_delay,X_origin,0)` to compute the detJ for the backward mapping.
+In the plotDetj.m, change `meshless_jacobian(X_origin,X_delay,0)` into `meshless_jacobian(X_delay,X_origin,0)` to compute the detJ for the backward mapping.
 
 
 # 2 Villin: 
@@ -243,6 +241,9 @@ To compute delay time using the fifth simulation, which is the wild type at 380K
 
 #### 2_FNN
 FNN determines the delay dimension to be 20.
+```bash
+>>FNN(ht2_4)
+```
 
 #### 3_RCT
 Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble traj10k.mat, where each simulation contribute 10k delayed points, and traj1000.mat, where each simulation contributes 1000 points. 
