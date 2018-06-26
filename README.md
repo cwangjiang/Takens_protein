@@ -21,7 +21,7 @@ Stride1 means there is no subsample, the interval between two frame is 0.2ns, an
 
 - Move `trajectory_all_stride1.pdb` here, and transfer .pdb to .gro file:
 ```bash
-editconf -f trajectory\_all\_stride1.pdb -o traj_pbc.gro
+editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
 ```
 This will generate `traj_pbc.gro`
 
@@ -37,7 +37,7 @@ this will generate `traj_Calpha.dat`
 ```bash
 >> load traj_Calpha.dat
 
->> save('traj_Calpha.mat','traj\_Calpha','-ascii')
+>> save('traj_Calpha.mat','traj_Calpha','-ascii')
 ```
 
 - use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
@@ -133,9 +133,9 @@ Move h2t here, and use delay time tau and delay dimension D to generate a recons
 This will generate a 100,000 by 50 matrix, each row is a reconstructed point, there are 100,000 points, the full length of `h2t.mat` is 1,000,000, and we sub-sample 100,000 from it, with a skip size of 10. 
 
 ## 5_RCT_dMaps
-Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
+Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points `EBD.mat`, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
 
-- Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points EBDsub.mat firt, then apply the rcut to the big trajectory EBD.mat.
+- Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points `EBDsub.mat` firt, then apply the rcut to the big trajectory `EBD.mat`.
 
 - Then using `loadingfile.m` to load the pairwise distance into matlab. 
 
@@ -153,7 +153,7 @@ Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, 
 ```
 
 ## 6_detJ
-Move X.mat from 1_dMaps and rename it as X_origin.mat, move X.mat from 5_RCT_dMaps and rename it as X_delay.mat. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
+Move `X.mat` from 1\_dMaps and rename it as `X_origin.mat`, move `X.mat` from 5_RCT_dMaps and rename it as `X_delay.mat`. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for compute detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
 ```bash
 >> plotDetj
 ```
@@ -203,7 +203,7 @@ This part deals with 37 individual simulation, and will be slightly different th
 ## 0_Simulation
 Full simulation trajectories of four types of simulation are provided: wild type at different temperatures, designed mutation (in Nature paper), single Alanine scanning mutations, tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
 
-Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in output.pdb, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long output.pdb into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
+Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in `output.pdb`, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long `output.pdb` into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
 ```bash
 ./CreatCoord.sh
 ```
@@ -216,18 +216,18 @@ Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajec
 ```bash
 >>Combinetraj
 ```
-This will generate traj.mat, which contain 370,000 points.
-We also generate a ensemble even smaller trajectory, each simulation just contatin 1000 point, the ensemble is subtraj.mat, which contain 37,000 points.
+This will generate `traj.mat`, which contain 370,000 points.
+We also generate a ensemble even smaller trajectory, each simulation just contatin 1000 point, the ensemble is `subtraj.mat`, which contain 37,000 points.
 
 #### 2_pdmap
-Move subtraj.mat here to conduct pivot diffusion maps on 37,000 points. Similar as before, numcut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a dMap.mat, which is the diffusion map of the small ensemble. 
+Move `subtraj.mat` here to conduct pivot diffusion maps on 37,000 points. Similar as before, numcut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a `dMap.mat`, which is the diffusion map of the small ensemble. 
 
 #### 3_nystrom
-Move dMap.mat traj.mat here, we use  `main.cpp` to compute distances between all 370,000 points and the 478 pivots, and insert 370,000 points back into the <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3"> space. This will generate X.mat.
+Move `dMap.mat` `traj.mat` here, we use  `main.cpp` to compute distances between all 370,000 points and the 478 pivots, and insert 370,000 points back into the <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3"> space. This will generate `X.mat`.
 
-In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate fes.mat
+In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate `fes.mat`.
 
-In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate fesD.mat
+In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate `fesD.mat`.
 
 #### 4_conventional
 
@@ -237,7 +237,7 @@ Similar to 3_nystrom, but compute and plot all FES in the conventional space.
 To conduct delay embedding and diffusion maps on the reconstructed points. 
 
 #### 1_MI
-To compute delay time using the fifth simulation, which is the wild type at 380K, because the simulation are indexing from 0, it show h2t_4.mat, not 5, which is a little bit weird. Delay time is determined to be 0.02ns.
+To compute delay time using the fifth simulation, which is the wild type at 380K, because the simulation are indexing from 0, it show `h2t_4.mat`, not 5, which is a little bit weird. Delay time is determined to be 0.02ns.
 
 #### 2_FNN
 FNN determines the delay dimension to be 20.
@@ -246,23 +246,23 @@ FNN determines the delay dimension to be 20.
 ```
 
 #### 3_RCT
-Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble traj10k.mat, where each simulation contribute 10k delayed points, and traj1000.mat, where each simulation contributes 1000 points. 
+Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble `traj10k.mat`, where each simulation contribute 10k delayed points, and `traj1000.mat`, where each simulation contributes 1000 points. 
 
 #### 4_pdMap
-Apply main.cpp on the smaller ensemble traj1000.mat, with numcut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
+Apply `main.cpp` on the smaller ensemble traj1000.mat, with numcut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
 
 #### 5_nystrom
 Compute distance between all 370,000 reconstructed point to the 970 pivots, and use nystrom to insert all 370,000 points back into the manifold, which generate X.mat. 
 
-In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate fesR.mat
+In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate `fesR.mat`.
 
-In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate fesRD.mat
+In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate `fesRD.mat`.
 
-Move fes.mat here and use `Compute_corr.m` to compute the FE correlation between the original FES and the reconstructed FES for each of the simulation. And compute the well depth for the original and the reconstructed one. 
+Move `fes.mat` here and use `Compute_corr.m` to compute the FE correlation between the original FES and the reconstructed FES for each of the simulation. And compute the well depth for the original and the reconstructed one. 
 
 ## 3_detJ
 
-Move X.mat from 1_dMaps/3_nystrom/X.mat here and rename it X_Original.mat. Move X.mat from 2_RCT/5_nystrom/X.mat and rename it X_delay.mat. Use `plotDetj.m` to compute Jacobian determinant.
+Move `X.mat` from 1_dMaps/3_nystrom/X.mat here and rename it `X_Original.mat`. Move `X.mat` from 2_RCT/5_nystrom/X.mat and rename it `X_delay.mat`. Use `plotDetj.m` to compute Jacobian determinant.
 
 
 
