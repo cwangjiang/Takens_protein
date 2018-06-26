@@ -151,6 +151,11 @@ Similar to 1\_dMaps, we apply pivot diffusion maps to the delayed points `EBD.ma
 ```bash
 >> Compute_Correlation
 ```
+The well depth for the original and the reconstructed FES can be computed as the difference between the maximum and minimum free energy for each point:
+```bash
+>> max(OriginFE) - min(OriginFE);
+>> max(delayFE) - min(delayFE);
+```
 
 ## 6_detJ
 Move `X.mat` from 1\_dMaps and rename it as `X_origin.mat`, move `X.mat` from 5_RCT_dMaps and rename it as `X_delay.mat`. Use `/bandwidthscan/bandwidthscan.m` to find correct Gaussian kernel bandwidth for computing detJ. We find that the measurement of the error decrease to 1/e at around 0.3. Then use `plotDetj.m` to compute detJ for the first 10000 points:
@@ -237,7 +242,7 @@ Similar to 3_nystrom, but compute and plot all FES in the conventional space.
 To conduct delay embedding and diffusion maps on the reconstructed points. 
 
 #### 1_MI
-To compute delay time using the fifth simulation, which is the wild type at 380K, because the simulation are indexing from 0, it show `h2t_4.mat`, not 5, which is a little bit weird. Delay time is determined to be 0.02ns.
+To compute delay time using the fifth simulation, which is the wild type at 380K, because the simulation are indexing from 0, the fifth system is actually `h2t_4.mat`, not h2t_5, which is a little bit weird. Delay time is determined to be 0.02ns.
 
 #### 2_FNN
 FNN determines the delay dimension to be 20.
@@ -246,13 +251,13 @@ FNN determines the delay dimension to be 20.
 ```
 
 #### 3_RCT
-Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble `traj10k.mat`, where each simulation contribute 10k delayed points, and `traj1000.mat`, where each simulation contributes 1000 points. 
+Construct delayed points using the above delay time and dimension for each simulation individually, and then combine all reconstructed points into a bigger ensemble `traj10k.mat`, where each simulation contributes 10k delayed points; and `traj1000.mat`, where each simulation contributes 1000 points. 
 
 #### 4_pdMap
-Apply `main.cpp` on the smaller ensemble traj1000.mat, with numcut = 2000, rcut = 2.5, this identify 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25. then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
+Apply `main.cpp` on the smaller ensemble traj1000.mat, with numcut = 2000, rcut = 2.5, this identifies 970 pivots, then apply diffusion maps on these 970 pivots with eps = 4.0 and alpha = 0.25, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2^*,\psi_4^*">.  This generates dMap.mat.
 
 #### 5_nystrom
-Compute distance between all 370,000 reconstructed point to the 970 pivots, and use nystrom to insert all 370,000 points back into the manifold, which generate X.mat. 
+Compute distances between all 370,000 reconstructed points to the 970 pivots, and use nystrom to insert all 370,000 points back into the manifold, which generate `X.mat`. 
 
 In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate `fesR.mat`.
 
