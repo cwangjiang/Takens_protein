@@ -1,5 +1,5 @@
 # Takens_protein
-The documentation for applying delay embedding on proteins
+This documentation is for applying delay embedding on proteins
 
 # 1 Trp-cage (2JOF): 
 
@@ -242,7 +242,7 @@ To compute delay time using the fifth simulation, which is the wild type at 380K
 #### 2_FNN
 FNN determines the delay dimension to be 20.
 ```bash
->>FNN(ht2_4)
+>>FNN_fast(ht2_4)
 ```
 
 #### 3_RCT

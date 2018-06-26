@@ -1,5 +1,5 @@
 # Takens_protein
-The documentation for applying delay embedding on proteins
+This documentation is for applying delay embedding on proteins.
 
 # 1 Trp-cage (2JOF): 
 
