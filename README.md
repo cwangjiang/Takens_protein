@@ -84,7 +84,7 @@ This generate `X.mat`, which is an N by 9 matrix, and the embedding of all 100,0
 ```
 this will generate `h2t.mat`.
 
-- Use `compute_RMSD.m` to compute Rg, RMSD, RMSD_helix, the native state is stored as trpnativeCalpha.mat
+- Use `compute_RMSD.m` to compute Rg, RMSD, RMSD_helix, the native state is stored as `trpnativeCalpha.mat`
 ```bash
 >> compute_RMSD
 ```
