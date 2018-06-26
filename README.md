@@ -21,7 +21,7 @@ Stride1 means there is no subsample, the interval between two frame is 0.2ns, an
 
 - Move `trajectory_all_stride1.pdb` here, and transfer .pdb to .gro file:
 ```bash
-editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
+editconf -f trajectory\_all\_stride1.pdb -o traj_pbc.gro
 ```
 This will generate `traj_pbc.gro`
 
@@ -37,7 +37,7 @@ this will generate `traj_Calpha.dat`
 ```bash
 >> load traj_Calpha.dat
 
->> save('traj_Calpha.mat','traj_Calpha','-ascii')
+>> save('traj_Calpha.mat','traj\_Calpha','-ascii')
 ```
 
 - use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
