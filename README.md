@@ -52,7 +52,7 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 
 ./main.out
 ```
-This will generate `Distance.mat`, `pivot.mat`, `pivotindex.mat`. 
+This will generate `Distance.mat`, `pivot.mat`, `pivotindex.mat`. In order to run main.cpp, we need to install C++ package Armadillo, which can handle the matrix operation and eigen decomposition in C++ much easiler, http://arma.sourceforge.net/. 
 
 - Use `loadingfile.m` in matlab to load these matrixs, and find out the number of pivots.
 	- `Distance.mat` is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots. 
