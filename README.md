@@ -23,7 +23,7 @@ Stride1 means there is no subsample, the interval between two frame is 0.2ns, an
 ```bash
 editconf -f trajectory_all_stride1.pdb -o traj_pbc.gro
 ```
-This will generate `traj_pbc.gro`
+This will generate `traj_pbc.gro`.
 
 - Use `clean_data.cpp` to clean .gro file, making it more structured:
 ```bash
@@ -31,7 +31,7 @@ g++ clean_data.cpp -o cleandata.out
 
 ./cleandata.out
 ```
-this will generate `traj_Calpha.dat`
+this will generate `traj_Calpha.dat`.
 
 - Load this structured `traj_Calpha.dat` into matlab, save it as an -ascii format .mat file: `traj_Calpha.mat`, so that it can be loaded in C++.
 ```bash
@@ -40,7 +40,7 @@ this will generate `traj_Calpha.dat`
 >> save('traj_Calpha.mat','traj_Calpha','-ascii')
 ```
 
-- use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points. because 1 million is too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
+- use `subtraj.m` in matlab to subsample 100,000 (skip size 10), or 10,000 (skip size 100) points, make it smaller to handle, we will use 100,000 points, because 1 million points are too much, 100k is OK, but still slow to run multiple times for finding parameters and debuging, so we will use the smaller set with 10,000 points to find hyper parameters, and then use such parameters to apply to 100,000 trajectory. 
 ```bash
 >> subtraj.m
 ```
@@ -54,15 +54,15 @@ g++ -std=c++0x  main.cpp functions.cpp -o main.out -O2 -larmadillo -llapack -lbl
 ```
 This will generate `Distance.mat`, `pivot.mat`, `pivotindex.mat`. 
 
-- Use `loadingfile.m` in matlab to load these matrix, and find out the number of pivots.
+- Use `loadingfile.m` in matlab to load these matrixs, and find out the number of pivots.
 	- `Distance.mat` is the m by N distance matrix, where N is total point number 10,000, m is the number of pivots. 
-	- `pivot.mat` is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off numcut, which should not be too large, otherwise such pivot will include too many point and desory the local find structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1. 
-	- `pivotindex.mat` is list out all N points and the pivot ID the belong to.
+	- `pivot.mat` is a m by 3 matrix also provides information of the pivots: the first column is index 1 to m, the second column is the index of the point form all N size that this pivot corresponds to, the third column is the domain size of this pivot, which is bounded by the number cut off numcut, which should not be too large, otherwise such pivot will include too many point and desory the local fine structures, empirically this hyper parameters is set to be N\*0.01~N\*0.1. 
+	- `pivotindex.mat` is list out all N points and the pivot ID it belongs to.
 ```bash
 >> loadingfile
 ```
 
-We find that using rcut = 0.41 give us 400 pivots, usually around 500~1000 pivots is pretty enough to cover the whole manifold, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will gives us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
+We find that using rcut = 0.41 give us 400 pivots, usually around 500~1000 pivots is pretty enough to cover the whole manifold, if we apply these parameters on the larger 100,000 points set, it should also give us 400 points, because these 400 points already cover the manifold, but in practice, we find it will give us more pivots on larger data sets, this should be due to larger data sets samples more unexplored regions. Then we change N = 100000, Nct = 1000, rcut = 0.41, traj.load("traj_Calpha_skip10.mat",raw_ascii), and excute the above codes, we get 622 pivots from the 100,000 points set.
 
 - `loadingfile.m` will generate the 622 by 622 distance matrix of only pivots, then use `dMap.m` in matlab to conduct diffusion maps on 622 pivot points matrix. In the `dMap.m` code, we need set N = 622, then tune parameters eps and <img src="https://latex.codecogs.com/gif.latex?\alpha">, where <img src="https://latex.codecogs.com/gif.latex?\alpha"> is the factor to rescale all pairwise distances, to balance the density, usually <img src="https://latex.codecogs.com/gif.latex?0.1<\alpha<1.0">, we can try different one, and see if it can shrink the sparse and expaned the condensed region to reveal more fine structures, we can also compute local density, to make sure good <img src="https://latex.codecogs.com/gif.latex?\alpha"> make the difference between maximum and minimum local density reasonable. eps is the Gaussian kernal bandwidth, it should be larger than rcut. We set esp = 1, and 
 <img src="https://latex.codecogs.com/gif.latex?\alpha=0.15">, then execute:
@@ -78,7 +78,7 @@ This will generate `dMap.mat` which store the eigenvectors and eigenvalues for 6
 This generate `X.mat`, which is an N by 9 matrix, and the embedding of all 100,000 points in to the dMap space, but we only care about the first two colums, since they correspond to <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">.
 
 
-- Then compute head to tail distance using `compute_h2t.m`, here we don't use the subsamplings, we use the full trajectory, so that the resolution of the h2t(t) is high enough.
+- Then compute head to tail distance using `compute_h2t.m`, here we don't use the subsamplings, we use the full trajectory with 1,000,000 points, so that the resolution of the h2t(t) is high enough.
 ```bash
 >> compute_h2t
 ```
