@@ -133,7 +133,7 @@ Move h2t here, and use delay time tau and delay dimension D to generate a recons
 This will generate a 100,000 by 50 matrix, each row is a reconstructed point, there are 100,000 points, the full length of `h2t.mat` is 1,000,000, and we sub-sample 100,000 from it, with a skip size of 10. 
 
 ## 5_RCT_dMaps
-Similar to 1_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
+Similar to 1\_dMaps, we use pivot diffusion maps to the delayed points EBD.mat, distance between two point is not RMSD between molecular configuration, but regular Eucledian distance. The brief process and parameters are provided below, details can be referred to 1_dMaps.
 
 - Use `main.cpp` to compute pairwise distances, setting numcut = 10000, and rcut = 8.5, traj.load("EBD.mat",raw_ascii), it will output 515 pivots. Similar to 1_dMaps, since 100,000 points are too much and runs slow, we can test different rcut on a smaller sampling of 10,000 points EBDsub.mat firt, then apply the rcut to the big trajectory EBD.mat.
 
