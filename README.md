@@ -201,23 +201,23 @@ In the plotDetj.m, change `meshless_jacobian(X_origin,X_delay,0)` into `meshless
 This part deals with 37 individual simulation, and will be slightly different from 1 Trp-cage:
 
 ## 0_Simulation
-Full simulation trajectories of four types of simulation are provided: 1. wild type Trp-cage at different temperatures, 2. designed mutation (in Nature paper https://www.nature.com/articles/nsb798), 3. single Alanine scanning mutations, 4. tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
+Full simulation trajectories of four types of simulation are provided: 1. wild type Trp-cage at different temperatures, 2. designed mutation (from Nature paper https://www.nature.com/articles/nsb798), 3. single Alanine scanning mutations, 4. tetrad Alanine scanning mutations. Mutated configuration is generated throught PEP-FOLD3: http://bioserv.rpbs.univ-paris-diderot.fr/services/PEP-FOLD3/, for problematic configurations, for example, there is missing residue or missing atoms, use PDBFixer to fix it: https://github.com/pandegroup/pdbfixer. Then run the simulation using openMM, the input and output files for each simulation are provided. /Cluster contains all full simulations from cluster.
 
-Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in `output.pdb`, we first need to generate a coordinate reference from the .pdb file using editconf, and then transfer the long `output.pdb` into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
+Each simulation is 1 micro second, containing 100,000 points, with interval to be 0.01ns. For each simulation from openMM, the trajectory is in `output.pdb`, we first need to generate a coordinate reference from the .pdb file using `editconf`, and then transfer the long `output.pdb` into .gro file, which only contain 20 alpha-carbon atoms, then clean the .gro file and subsample 10,000 points. All these are include in the `CreatCoord.sh` script.
 ```bash
 ./CreatCoord.sh
 ```
-This will generate `coordinates_sub_XXX.dat` file the subsampling of only 10,000 configurations, and each configuration contain only alpha-carbon atoms.
+This will generate `coordinates_sub_XXX.dat`, the subsampling of only 10,000 configurations, and each configuration contains only alpha-carbon atoms.
 
 ## 1_dMaps
 
 #### 1_All_subtraj
-Move all coordinates_sub_XXX.dat here, use `combinetraj.m` to combine all trajectories into one ensemble in matlab.
+Move all `coordinates_sub_XXX.dat` here, use `combinetraj.m` to combine all trajectories into one ensemble in matlab.
 ```bash
 >>Combinetraj
 ```
 This will generate `traj.mat`, which contain 370,000 points.
-We also generate a ensemble even smaller trajectory, each simulation just contatin 1000 point, the ensemble is `subtraj.mat`, which contain 37,000 points.
+We also generate an ensemble of smaller trajectories, each simulation just contatin 1000 point, the ensemble is `subtraj.mat`, which contain 37,000 points.
 
 #### 2_pdmap
 Move `subtraj.mat` here to conduct pivot diffusion maps on 37,000 points. Similar as before, numcut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a `dMap.mat`, which is the diffusion map of the small ensemble. 
