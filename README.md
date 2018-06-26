@@ -216,8 +216,8 @@ Move all `coordinates_sub_XXX.dat` here, use `combinetraj.m` to combine all traj
 ```bash
 >>Combinetraj
 ```
-This will generate `traj.mat`, which contain 370,000 points.
-We also generate an ensemble of smaller trajectories, each simulation just contatin 1000 point, the ensemble is `subtraj.mat`, which contain 37,000 points.
+This will generate `traj.mat`, which contains 370,000 points.
+We also generate an ensemble of smaller trajectories, each simulation just contributes 1000 point, the ensemble is `subtraj.mat`, which contain 37,000 points.
 
 #### 2_pdmap
 Move `subtraj.mat` here to conduct pivot diffusion maps on 37,000 points. Similar as before, numcut = 1000, rcut = 0.38, which gives 478 pivots, in diffusion maps, eps = 0.8, alpha = 1.0, then extract CV <img src="https://latex.codecogs.com/gif.latex?\psi_2,\psi_3">. This will generate a `dMap.mat`, which is the diffusion map of the small ensemble. 
@@ -227,7 +227,7 @@ Move `dMap.mat` `traj.mat` here, we use  `main.cpp` to compute distances between
 
 In /FES, use `RUNFES.m` to compute and plot all FES for each of 37 systems. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy associate with each point for each system, and generate `fes.mat`.
 
-In /FES/Differences, use use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate `fesD.mat`.
+In /FES/Differences, use `RUNFES.m` to compute and plot all FES difference for each of 37 systems relative to #5, the reference FES is stored as Href.mat. `RUNFES_png.m` is to plot and save a .png file. `RUNFES_new.m` is to compute free energy differences associate with each point for each system, and generate `fesD.mat`.
 
 #### 4_conventional
 
